@@ -1,5 +1,9 @@
 import { ClerkProvider } from "@clerk/nextjs";
-import logo from '@/assets/logo.svg';
+import logo from "@/assets/logo.svg";
+import "../globals.css";
+import { Inter } from "next/font/google";
+import { twMerge } from "tailwind-merge";
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
   title: "Next.js",
@@ -15,7 +19,9 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
-        <body>{children}</body>
+        <body className={twMerge(inter.className, "bg-dark-1")}>
+          {children}
+        </body>
       </html>
     </ClerkProvider>
   );

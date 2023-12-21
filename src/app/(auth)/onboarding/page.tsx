@@ -4,18 +4,18 @@ import { currentUser } from "@clerk/nextjs";
 
 const Onboarding = async () => {
   const user = await currentUser();
+  if (!user) return null; // to avoid typescript warnings
 
-  const userInfo = {
-    _id: "",
-  };
-
+  // const userInfo = await fetchUser(user.id);
+  // if (userInfo?.onboarded) redirect("/");
+  const userInfo: any = {};
   const userData = {
-    id: user?.id,
+    id: user.id,
     objectId: userInfo?._id,
-    username: userInfo?.username || user?.username,
-    name: userInfo?.name || user?.firstName || "",
-    bio: userInfo?.bio || "",
-    image: userInfo?.image || user?.imageUrl,
+    username: userInfo ? userInfo?.username : user.username,
+    name: userInfo ? userInfo?.name : user.firstName ?? "",
+    bio: userInfo ? userInfo?.bio : "",
+    image: userInfo ? userInfo?.image : user.imageUrl,
   };
 
   return (
