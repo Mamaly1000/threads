@@ -1,6 +1,6 @@
 "use client";
 import { sidebarLinks } from "@/constants";
-import { SignOutButton, SignedIn } from "@clerk/nextjs";
+import { SignOutButton, SignedIn, useUser } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -9,6 +9,7 @@ import { twMerge } from "tailwind-merge";
 import logout from "@/assets/logout.svg";
 
 const LeftSidebar = () => {
+  const user = useUser();
   const pathname = usePathname();
   const router = useRouter();
   const isActive = useCallback(
@@ -24,6 +25,26 @@ const LeftSidebar = () => {
     <section className="leftsidebar custom-scrollbar">
       <div className="flex w-full flex-1 flex-col gap-6 px-6">
         {sidebarLinks.map((link) => {
+          if (link.route === "/profile") {
+            return (
+              <Link
+                href={`${link.route}/${user.user?.id}`}
+                key={link.label}
+                className={twMerge(
+                  `leftsidebar_link`,
+                  isActive(link.route) ? "bg-primary-500" : ""
+                )}
+              >
+                <Image
+                  src={link.imgURL}
+                  alt={link.label}
+                  width={24}
+                  height={24}
+                />
+                <p className="text-light-1 max-lg:hidden">{link.label}</p>
+              </Link>
+            );
+          }
           return (
             <Link
               href={link.route}

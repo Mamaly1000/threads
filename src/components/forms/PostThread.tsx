@@ -1,25 +1,19 @@
 "use client";
-import React, { ChangeEvent, useState } from "react";
+import React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { ThreadValidation } from "@/lib/validations/thread";
-import profile from "@/assets/profile.svg";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { z } from "zod";
-import { Button } from "../ui/button";
-import Image from "next/image";
-import { Textarea } from "../ui/textarea";
-import { isBase64Image } from "@/lib/utils";
-import { useUploadThing } from "@/lib/uploadthing";
-import { updateUser } from "@/lib/actions/user";
+import { Button } from "../ui/button"; 
+import { Textarea } from "../ui/textarea"; 
 import { usePathname, useRouter } from "next/navigation";
 import { createThread } from "@/lib/actions/thread";
 const PostThread = ({ userId }: { userId: string }) => {
@@ -38,8 +32,10 @@ const PostThread = ({ userId }: { userId: string }) => {
       text: values.thread,
       communityId: null,
       path,
+    }).then(() => {
+      alert("thread created successfully!");
     });
-    router.push("/")
+    router.push("/");
   };
 
   return (
@@ -57,7 +53,7 @@ const PostThread = ({ userId }: { userId: string }) => {
                 Content
               </FormLabel>
               <FormControl className="flex-1 no-focus border border-dark-4 bg-dark-3 text-light-1 text-base-semibold">
-                <Textarea rows={15} {...field} />
+                <Textarea rows={15} {...field} className="text-light-1" />
               </FormControl>
               <FormMessage />
             </FormItem>

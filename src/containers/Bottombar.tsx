@@ -1,5 +1,6 @@
 "use client";
 import { sidebarLinks } from "@/constants";
+import { useUser } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -7,6 +8,7 @@ import React, { useCallback } from "react";
 import { twMerge } from "tailwind-merge";
 
 const Bottombar = () => {
+  const user = useUser();
   const pathname = usePathname();
   const router = useRouter();
   const isActive = useCallback(
@@ -22,6 +24,28 @@ const Bottombar = () => {
     <section className="bottombar ">
       <div className="bottombar_container">
         {sidebarLinks.map((link) => {
+          if (link.route === "/profile") {
+            return (
+              <Link
+                href={`${link.route}/${user.user?.id}`}
+                key={link.label}
+                className={twMerge(
+                  `bottombar_link`,
+                  isActive(link.route) ? "bg-primary-500" : ""
+                )}
+              >
+                <Image
+                  src={link.imgURL}
+                  alt={link.label}
+                  width={24}
+                  height={24}
+                />
+                <p className="text-light-1 text-subtle-medium max-sm:hidden line-clamp-1">
+                  {link.label.split(/\s+/)[0]}
+                </p>
+              </Link>
+            );
+          }
           return (
             <Link
               href={link.route}

@@ -1,18 +1,22 @@
 import PostThread from "@/components/forms/PostThread";
 import { fetchUser } from "@/lib/actions/user";
+import { parser } from "@/lib/parser";
 import { currentUser } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import React from "react";
 
 const Page = async () => {
-  const user = await currentUser();
+  const user = parser(await currentUser());
   if (!user) return null;
-  const userInfo = await fetchUser(user?.id);
+  const userInfo: { _id: string; onboarded: boolean } = parser(
+    await fetchUser(user?.id)
+  );
+
   if (userInfo && !userInfo.onboarded) redirect("/onboarding");
   return (
     <>
-      <h1 className="head-text">create thread</h1>
-      <PostThread userId={userInfo._id as string} />
+      <h1 className="head-text capitalize">create thread</h1>
+      <PostThread userId={JSON.parse(JSON.stringify(userInfo))._id} />
     </>
   );
 };

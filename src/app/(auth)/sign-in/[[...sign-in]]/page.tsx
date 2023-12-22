@@ -1,5 +1,9 @@
 import { SignIn } from "@clerk/nextjs";
 
 export default function Page() {
-  return <SignIn />;
+  return (
+    <section className="w-full flex items-center justify-center min-h-screen" >
+      <SignIn />
+    </section>
+  );
 }
