@@ -10,7 +10,7 @@ export default async function Home() {
   const user = parser(await currentUser());
   if (!user) redirect("/sign-in");
   const userInfo = parser(await fetchUser(user?.id));
-  if (!userInfo.onboarded) redirect("/onboarding");
+  if (userInfo&&!userInfo.onboarded) redirect("/onboarding");
   const threads = parser(await GetThreads({}));
 
   return (
