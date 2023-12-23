@@ -10,8 +10,8 @@ export default async function Home() {
   const user = parser(await currentUser());
   if (!user) redirect("/sign-in");
   const userInfo = parser(await fetchUser(user?.id));
-  if (userInfo&&!userInfo.onboarded) redirect("/onboarding");
-  const threads = parser(await GetThreads({}));
+  if (userInfo && !userInfo.onboarded) redirect("/onboarding");
+  const threads = parser(await GetThreads({})); 
 
   return (
     <div className="min-h-screen  p-5">

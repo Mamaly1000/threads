@@ -7,6 +7,7 @@ import user from "@/assets/user.svg";
 import tag from "@/assets/tag.svg";
 import members from "@/assets/members.svg";
 import reply from "@/assets/reply.svg";
+import request from "@/assets/request.svg";
 export const sidebarLinks = [
   {
     imgURL: home.src,
@@ -47,7 +48,7 @@ export const profileTabs = [
 ];
 
 export const communityTabs = [
-  { value: "threads", label: "Threads", icon: "/assets/reply.svg" },
-  { value: "members", label: "Members", icon: "/assets/members.svg" },
-  { value: "requests", label: "Requests", icon: "/assets/request.svg" },
+  { value: "threads", label: "Threads", icon: reply.src },
+  { value: "members", label: "Members", icon: members.src },
+  { value: "requests", label: "Requests", icon: request.src },
 ];

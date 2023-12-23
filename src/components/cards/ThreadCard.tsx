@@ -10,7 +10,7 @@ import repost from "@/assets/repost.svg";
 import moment from "moment";
 import github from "@/assets/icons8-github-500.svg";
 import { twMerge } from "tailwind-merge";
-const ThreadCard = ({ thread }: { thread: ThreadType }) => {
+const ThreadCard = ({ thread }: { thread: ThreadType }) => { 
   return (
     <article
       className={twMerge(
@@ -92,20 +92,23 @@ const ThreadCard = ({ thread }: { thread: ThreadType }) => {
           </div>
         </div>
       </div>
-      {!thread.isComment && (
-        <div className="text-gray-500 text-[.7rem] w-full mt-10 flex items-start justify-start gap-2 flex-row">
-          {moment(thread.createdAt).format("HH:MM - MMM DD, YYYY")} -{" "}
-          <Link href="https://github.com/Mamaly1000" className="flex gap-1">
-            Developed By Mohammad Azizi{" "}
-            <Image
-              src={github.src}
-              alt="my github"
-              width={15}
-              height={15}
-              className="rounded-full object-center"
-            />
-          </Link>
-        </div>
+      {!thread.isComment && thread.community && (
+        <Link
+          href={`/communities/${thread.community.id}`}
+          className="text-gray-500 text-[.7rem] w-full mt-10 flex items-start justify-start gap-2 flex-row"
+        >
+          <p className="text-subtle-medium text-gray-1">
+            {moment(thread.createdAt).format("HH:MM - MMM DD, YYYY")} -{" "}
+            {thread.community.name}
+          </p>
+          <Image
+            src={thread.community.image}
+            alt={thread.community.name}
+            width={15}
+            height={15}
+            className="rounded-full object-cover"
+          />
+        </Link>
       )}
     </article>
   );

@@ -3,27 +3,33 @@ import { parser } from "@/lib/parser";
 import { redirect } from "next/navigation";
 import React from "react";
 import ThreadCardList from "../lists/ThreadCardList";
+import { fetchCommunityPosts } from "@/lib/actions/community.actions";
 
 const TreadsTab = async ({
   accountId,
-  accountType,
+  accountType = "User",
   currentUserId,
 }: {
   currentUserId: string;
   accountId: string;
-  accountType: "User";
+  accountType: "User" | "Community";
 }) => {
-  const user = parser(await getUsersThreads({ userId: accountId }));
-  if (!user) redirect("/");
+  let results: any = [];
+  if (accountType === "User") {
+    results = parser(await getUsersThreads({ userId: accountId }));
+  } else if (accountType === "Community") {
+    results = parser(await fetchCommunityPosts(accountId));
+  }
+  if (!results) redirect("/");
 
   return (
     <ThreadCardList
       account={{
-        id: user.id,
-        name: user.name,
-        image: user.image,
+        id: results.id,
+        name: results.name,
+        image: results.image,
       }}
-      List={user.threads}
+      List={results.threads}
       user={{ _id: currentUserId }}
     />
   );

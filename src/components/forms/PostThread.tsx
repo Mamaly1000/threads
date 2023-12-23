@@ -6,19 +6,22 @@ import { ThreadValidation } from "@/lib/validations/thread";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { z } from "zod";
-import { Button } from "../ui/button"; 
-import { Textarea } from "../ui/textarea"; 
+import { Button } from "../ui/button";
+import { Textarea } from "../ui/textarea";
 import { usePathname, useRouter } from "next/navigation";
 import { createThread } from "@/lib/actions/thread";
+import { useOrganization } from "@clerk/nextjs";
 const PostThread = ({ userId }: { userId: string }) => {
   const path = usePathname();
   const router = useRouter();
+  const { organization } = useOrganization();
   const form = useForm({
     resolver: zodResolver(ThreadValidation),
     defaultValues: {
@@ -27,14 +30,26 @@ const PostThread = ({ userId }: { userId: string }) => {
     },
   });
   const onSubmit = async (values: z.infer<typeof ThreadValidation>) => {
-    await createThread({
-      author: userId,
-      text: values.thread,
-      communityId: null,
-      path,
-    }).then(() => {
-      alert("thread created successfully!");
-    });
+    if (!organization) {
+      await createThread({
+        author: userId,
+        text: values.thread,
+        communityId: null,
+        path,
+      }).then(() => {
+        alert("thread created successfully!");
+      });
+    } else {
+      await createThread({
+        author: userId,
+        text: values.thread,
+        communityId: organization.id,
+        path,
+      }).then(() => {
+        alert(organization.name + " : thread created successfully!");
+      });
+    }
+
     router.push("/");
   };
 
@@ -56,6 +71,12 @@ const PostThread = ({ userId }: { userId: string }) => {
                 <Textarea rows={15} {...field} className="text-light-1" />
               </FormControl>
               <FormMessage />
+              {!!organization && (
+                <FormDescription className="text-small-regular text-light-2 capitalize">
+                  write a thread for <span className="text-body-bold text-primary-500" >{organization?.name}</span>{" "}
+                  community!
+                </FormDescription>
+              )}
             </FormItem>
           )}
         />
